@@ -1,0 +1,17 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+
+POST https://localhost:5050/products
+Content-Type: application/json
+
+{
+  "Name": "Product 1",
+  "Price": 100,
+  "Category": ["Category 1", "Category 2"],
+  "Description": "Description 1",
+  "Image": "Image 1"
+}
+
+###
+
+GET https://localhost:5050/products
+Accept: application/json
