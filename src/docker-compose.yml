@@ -4,6 +4,11 @@ services:
   catalogdb:
     image: postgres:15-alpine
         
+  cartdb:
+    image: postgres:15-alpine
+
+  distributedcache:
+    image: redis:alpine
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -11,6 +16,12 @@ services:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
 
+  cart.api:
+    image: ${DOCKER_REGISTRY-}cartapi
+    build:
+      context: .
+      dockerfile: Services/Cart/Cart.API/Dockerfile
+
 volumes:
   catalogdb_data:
-
+  cartdb_data:  

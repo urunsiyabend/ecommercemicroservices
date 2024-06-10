@@ -1,0 +1,19 @@
+﻿global using Carter;
+global using FluentValidation;
+global using Mapster;
+global using Marten;
+global using Marten.Pagination;
+global using Marten.Schema;
+global using MediatR;
+global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+global using Microsoft.Extensions.Caching.Distributed;
+global using Microsoft.Extensions.Caching.StackExchangeRedis;
+global using HealthChecks.UI.Client;
+
+global using BuildingBlocks.Behaviors;
+global using BuildingBlocks.CQRS;
+global using BuildingBlocks.Exceptions;
+global using BuildingBlocks.Exceptions.Handler;
+global using Cart.API.Data;
+global using Cart.API.Exceptions;
+global using Cart.API.Models;

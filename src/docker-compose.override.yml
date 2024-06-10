@@ -13,6 +13,24 @@ services:
     volumes:
       - catalogdb_data:/var/lib/postgresql/data
   
+  cartdb:
+    container_name: cartdb
+    environment:
+      POSTGRES_DB: CartDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+    ports:
+        - "5433:5432"
+    volumes:
+      - cartdb_data:/var/lib/postgresql/data
+
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+        - "6379:6379"
+
   catalog.api:
     environment:
         - ASPNETCORE_ENVIRONMENT=Development
@@ -27,3 +45,20 @@ services:
     volumes:
         - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
         - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+  cart.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__Database=Server=cartdb;Port=5432;Database=CartDB;User ID=postgres;Password=postgres
+      - ConnectionStrings__Redis=distributedcache:6379
+    depends_on:
+      - cartdb
+      - distributedcache
+    ports:
+      - "6001:8080"
+      - "6061:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
