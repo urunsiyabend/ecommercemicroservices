@@ -53,9 +53,11 @@ services:
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=cartdb;Port=5432;Database=CartDB;User ID=postgres;Password=postgres
       - ConnectionStrings__Redis=distributedcache:6379
+      - GrpcConfigs__DiscountUrl=http://discount.grpc:8081
     depends_on:
       - cartdb
       - distributedcache
+      - discount.grpc 
     ports:
       - "6001:8080"
       - "6061:8081"
