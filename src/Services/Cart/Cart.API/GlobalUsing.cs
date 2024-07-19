@@ -17,3 +17,4 @@ global using BuildingBlocks.Exceptions.Handler;
 global using Cart.API.Data;
 global using Cart.API.Exceptions;
 global using Cart.API.Models;
+global using Discount.gRPC;

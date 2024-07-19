@@ -1,5 +1,4 @@
-﻿
-namespace Cart.API.Features.StoreCart
+﻿namespace Cart.API.Features.StoreCart
 {
     public record StoreCartCommand(ShoppingCart Cart) : ICommand<StoreCartResult>;
 
@@ -18,15 +17,31 @@ namespace Cart.API.Features.StoreCart
         }
     }
 
-    public class StoreCartCommandHandler(ICartRepository cartRepository) : ICommandHandler<StoreCartCommand, StoreCartResult>
+    public class StoreCartCommandHandler(ICartRepository cartRepository, DiscountProtoService.DiscountProtoServiceClient discountProto) : ICommandHandler<StoreCartCommand, StoreCartResult>
     {
         public async Task<StoreCartResult> Handle(StoreCartCommand command, CancellationToken cancellationToken)
         {
+            await DeductDiscount(command.Cart, cancellationToken);
+            
             ShoppingCart cart = command.Cart;
 
             await cartRepository.StoreCartAsync(cart, cancellationToken);
 
             return new StoreCartResult(cart.Username);
+        }
+
+        public async Task DeductDiscount(ShoppingCart cart, CancellationToken cancellationToken)
+        {
+            foreach (var item in cart.Items)
+            {
+                var discountRequest = new GetDiscountRequest { ProductId = item.ProductId.ToString() };
+                var discount = await discountProto.GetDiscountAsync(discountRequest);
+
+                if (discount.Amount > 0)
+                {
+                    item.Price -= (decimal)discount.Amount;
+                }
+            }
         }
     }
 }
